@@ -33,23 +33,16 @@ feature 'restaurants' do
 
     scenario 'can not edit a restaurant' do
       visit restaurants_path
-      click_link 'Edit KFC'
-      expect(page).not_to have_content "Name"
-      expect(page).not_to have_content 'Update Restaurant'
-      expect(page).to have_content "Log in"
+      expect(page).not_to have_content "Edit KFC"
     end
 
     scenario 'can not delete a restaurant' do
       visit restaurants_path
-      click_link 'Delete KFC'
-      expect(page).not_to have_content "Name"
-      expect(page).not_to have_content "KFC no longer exists"
-      expect(page).to have_content "Log in"
+      expect(page).not_to have_content "Delete KFC"
     end
   end
 
   context 'when signed in' do
-
     before do
       sign_up
     end
