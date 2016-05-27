@@ -13,12 +13,11 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = current_user.restaurants.create(restaurant_params)
     if @restaurant.save
-      redirect_to '/restaurants'
+      redirect_to restaurants_path
     else
-      render 'new'
+      render :new
     end
   end
-
 
   def show
     @restaurant = Restaurant.find(params[:id])
@@ -26,6 +25,12 @@ class RestaurantsController < ApplicationController
 
   def edit
     @restaurant = Restaurant.find(params[:id])
+    if @restaurant.belongs_to? current_user
+      render :edit
+    else
+      flash[:notice] = "User can not edit another user's Restaurant"
+      redirect_to restaurants_path
+    end
   end
 
   def update
@@ -36,9 +41,13 @@ class RestaurantsController < ApplicationController
 
   def destroy
     restaurant = Restaurant.find(params[:id])
-    restaurant.destroy
-    flash[:notice] = "#{restaurant.name} no longer exists"
-    redirect_to '/restaurants'
+    if restaurant.belongs_to? current_user
+      restaurant.destroy
+      flash[:notice] = "#{restaurant.name} no longer exists"
+    else
+      flash[:notice] = "User can not delete another user's Restaurant"
+    end
+      redirect_to restaurants_path
   end
 
   def restaurant_params

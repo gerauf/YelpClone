@@ -13,4 +13,5 @@ module WithUserAssociationExtension
     attributes[:user] ||= user
     build(attributes)
   end
+
 end
