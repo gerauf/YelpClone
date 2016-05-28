@@ -11,7 +11,7 @@ class RestaurantsController < ApplicationController
   end
 
   def create
-    @restaurant = current_user.restaurants.create(restaurant_params)
+    @restaurant = Restaurant.create_with_user(restaurant_params, current_user)
     if @restaurant.save
       redirect_to restaurants_path
     else
@@ -25,9 +25,7 @@ class RestaurantsController < ApplicationController
 
   def edit
     @restaurant = Restaurant.find(params[:id])
-    if @restaurant.belongs_to? current_user
-      render :edit
-    else
+    unless @restaurant.belongs_to? current_user
       flash[:notice] = "User can not edit another user's Restaurant"
       redirect_to restaurants_path
     end
@@ -51,7 +49,7 @@ class RestaurantsController < ApplicationController
   end
 
   def restaurant_params
-    params.require(:restaurant).permit(:name, :description)
+    params.require(:restaurant).permit(:name, :description, :image)
   end
 
 end

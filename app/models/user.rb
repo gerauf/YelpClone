@@ -30,8 +30,4 @@ class User < ActiveRecord::Base
     reviewed_restaurants.include? restaurant
   end
 
-  def is_current?
-    id == current_user.id
-  end
-
 end
